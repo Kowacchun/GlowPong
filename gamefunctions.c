@@ -1,6 +1,8 @@
 #include <avr/io.h>
 #include "gamefunctions.h"
 
+// SETTING FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 // Cycles between one player (0x01) and two players (0x03)
 // Requires 2 LEDs
 // Requires 1 Button
@@ -15,22 +17,50 @@ void changeMode(unsigned char newMode) {
 	currMode = newMode;
 }
 
+// TRAJECTORY FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//FUNCTIONS REGARDING TRAJECTORY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Changes X trajectory factor ... ex) 1 -> 2 or -1 -> -2 or 2 -> 1 or -2 -> -1
+void changeXTrajectory(unsigned char newXTrajectory) {
+	currXTrajectory = newXTrajectory;
+}
 
-// Passes in both trajectories, but only modifies X trajectory maxing out at 2. 
-// Note: X and Y make the slope
-void changeTrajectory(unsigned char currXTrajectory, unsigned char currYTrajectory) {
+// Reverses current X trajectory
+void reverseXTrajectory(signed char currXTrajectory) {
+	currXTrajectory = currXTrajectory * -1;
+}
+
+// Reverses current Y trajectory
+void reverseYTrajectory(signed char currYTrajectory) {
+	currYTrajectory = currYTrajectory * -1;
+}
+
+// BALL FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void updateBallPosition(unsigned char currXTrajectory, unsigned char currYTrajectory) {
 
 }
 
-void reverseTrajectory() {
-	
+void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory) {
+
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Displays scores constantly.
+void updateFireballPosition(unsigned char fireballXPosition) {
+
+}
+
+void fireballCollisionHandler(unsigned char fireballXPosition) {
+
+}
+
+void mirrorCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory) {
+
+}
+
+// END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Displays scores constantly for two players.
+// AI also counts as player 2
 void displayScores(unsigned char playerOneScore, unsigned char playerTwoScore) {
 
 }
@@ -41,32 +71,16 @@ void blinkWinnerLED(unsigned char playerOneScore, unsigned char playerTwoScore) 
 
 }
 
-// Soft resets the game and set everything back to default
-void resetGame() {
-	currMode = 1;
-	numPlayers = 1;
-	currXTrajectory = 1;
-	currYTrajectory = 1;
+// GEMU FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	playerOneScore = 0;
-	playerTwoScore = 0;
-	computerAIScore = 0;
+// Soft resets the game (paddle position and etc)
+void softResetGame() {
 
-	gameLoaded = 0;
+}
 
-	playerOnePaddleLeft = 2;
-	playerOnePaddleCenter = 3;
-	playerOnePaddleRight = 4;
+//hard resets the game (resets everything)
+void hardResetGame() {
 
-	playerTwoPaddleLeft = 4;
-	playerTwoPaddleCenter = 3;
-	playerTwoPaddleRight = 2;
-
-	tasksNum = 3;
-	gamePeriodGCD = 100;
-	gamePeriod = 100;
-
-	totalMatches = 5;
 }
 
 // Runs the game with the settings set by player 1
@@ -74,9 +88,13 @@ void runGame(unsigned char currMode, unsigned char numPlayers) {
 
 }
 
-// PADDLE MOVEMENT FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Updates paddle location accordingly
-void leftPaddleMove();
+// PADDLE MOVEMENT FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void rightPaddleMove();
+void leftPaddleMove() {
+
+}
+
+void rightPaddleMove() {
+
+}

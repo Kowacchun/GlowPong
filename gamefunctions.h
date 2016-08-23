@@ -2,28 +2,42 @@
 #define __GAMEFUNCTIONS_H__
 
 
+// SETTING FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 // Cycles between one player (0x01) and two players (0x03)
 // Requires 2 LEDs
 // Requires 1 Button
-void chooseNumPlayers(unsigned char numPlayers);
+void chooseNumPlayers(unsigned char newNumPlayers);
 
 // Cycles between Normal (0x01) / Fireball (0x02) / Invert (0x03) Barrier modes
 // Requires 2 LEDs
 // Requires 1 Button
-void changeMode(unsigned char currMode);
+void changeMode(unsigned char newMode);
 
 // TRAJECTORY FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Passes in both trajectories, but only modifies X trajectory maxing out at 2. 
-// Note: X and Y make the slope
-void changeTrajectory(unsigned char currXTrajectory, unsigned char currYTrajectory);
 
-void reverseTrajectory(unsigned char currXTrajectory, unsigned char currYTrajectory);
+// Changes X trajectory factor ... ex) 1 -> 2 or -1 -> -2 or 2 -> 1 or -2 -> -1
+void changeXTrajectory(unsigned char newXTrajectory);
 
-void collisionHandler(unsigned currXTrajectory, unsigned char currYTrajectory);
+// Reverses current X trajectory
+void reverseXTrajectory(signed char currXTrajectory);
+
+// Reverses current Y trajectory
+void reverseYTrajectory(signed char currYTrajectory);
 
 // BALL FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void updateBallPosition(unsigned currXTrajectory, unsigned char currYTrajectory);
+void updateBallPosition(unsigned char currXTrajectory, unsigned char currYTrajectory);
+
+void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory);
+
+// SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void updateFireballPosition(unsigned char fireballXPosition);
+
+void fireballCollisionHandler(unsigned char fireballXPosition);
+
+void mirrorCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory);
 
 // END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Displays scores constantly for two players.
@@ -34,10 +48,13 @@ void displayScores(unsigned char playerOneScore, unsigned char playerTwoScore);
 // Requires 2 LEDs
 void blinkWinnerLED(unsigned char playerOneScore, unsigned char playerTwoScore);
 
-// Soft resets the game
-void resetGame();
+// GEMU FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Soft resets the game (paddle position and etc)
+void softResetGame();
+
+//hard resets the game (resets everything)
+void hardResetGame();
 
 // Runs the game with the settings set by player 1
 void runGame(unsigned char currMode, unsigned char numPlayers);

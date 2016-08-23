@@ -8,6 +8,8 @@
 
 extern volatile unsigned char TimerFlag;
 
+// MANY VARIABLE DECLARATIONS INCOMING!
+
 // Define settings and mechanics
 unsigned char currMode = 1;
 unsigned char numPlayers = 1;
@@ -29,8 +31,12 @@ unsigned char lastTouch = 1;
 unsigned char fireballXPosition = 0;
 unsigned char fireballYPosition = 4;
 
+unsigned char fireballTrajectory = 1;
+
 // Fireball Flag
 unsigned char fireballOn = 0;
+
+//-----------------------------------
 
 // Mirror only has Y axis placement
 unsigned char mirrorLocation = 4;
@@ -91,7 +97,7 @@ int TickFct_PlayerSelection(int state);
 enum MS_States {MS_Start, MS_Normal, MS_NormalRelease, MS_Fireball, MS_FireballRelease, MS_Invert, MS_InvertRelease};
 int TickFct_ModeSelection(int state);
 
-enum GS_States {GS_Start};
+enum GS_States {GS_Start, GS_Setup, GS_RunGame};
 int TickFct_GameStart(int state);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -310,7 +316,41 @@ int TickFct_ModeSelection(int state) {
 
 // Game Start SM
 int TickFct_GameStart(int state) {
-	return state;
+	switch(state) {
+		case GS_Start:
+		state = GS_Setup;
+		break;
+
+		case GS_Setup:
+		
+		break;
+
+		case GS_RunGame:
+
+		break;
+
+		default:
+		state = GS_Start;
+		break;
+	}
+
+	switch(state) {
+		case GS_Start:
+		;
+		break;
+
+		case GS_Setup:
+
+		break;
+
+		case GS_RunGame:
+
+		break;
+
+		default:
+		;
+		break;
+	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
