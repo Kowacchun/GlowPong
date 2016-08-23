@@ -29,7 +29,7 @@ void reverseYTrajectory(signed char currYTrajectory);
 
 void updateBallPosition(unsigned char currXTrajectory, unsigned char currYTrajectory);
 
-void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory);
+void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition);
 
 // SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -62,8 +62,12 @@ void runGame(unsigned char currMode, unsigned char numPlayers);
 
 // PADDLE MOVEMENT FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void leftPaddleMove();
+void playerOneLeftPaddleMove();
 
-void rightPaddleMove();
+void playerTwoLeftPaddleMove();
+
+void playerOneRightPaddleMove();
+
+void playerTwoRightPaddleMove();
 
 #endif

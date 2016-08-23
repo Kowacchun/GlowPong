@@ -13,7 +13,7 @@ extern volatile unsigned char TimerFlag;
 // Define settings and mechanics
 unsigned char currMode = 1;
 unsigned char numPlayers = 1;
-unsigned char currXTrajectory = 1;
+unsigned char currXTrajectory = 0;
 unsigned char currYTrajectory = 1;
 
 unsigned char playerOneScore = 0;
@@ -74,7 +74,7 @@ unsigned char ballYPosition = 6;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Define tasks period here
-const unsigned char tasksNum = 3;
+const unsigned char tasksNum = 5;
 const unsigned char gamePeriodGCD = 30;
 const unsigned char gamePeriod = 30;
 
@@ -83,7 +83,7 @@ const unsigned char totalMatches = 5;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Task array
-task tasks[3];
+task tasks[tasksNum];
 
 // Output variables
 unsigned char PS_B;
@@ -99,6 +99,12 @@ int TickFct_ModeSelection(int state);
 
 enum GS_States {GS_Start, GS_Setup, GS_RunGame};
 int TickFct_GameStart(int state);
+
+enum PDO_States {PDO_Start, PDO_Left, PDO_Right, PDO_Stationary};
+int TickFct_PaddleMoveOne(int state);
+
+enum PDT_States {PDT_Start, PDT_Left, PDT_Right, PDT_Stationary};
+int TickFct_PaddleMoveTwo(int state);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -322,10 +328,24 @@ int TickFct_GameStart(int state) {
 		break;
 
 		case GS_Setup:
-		
+		if(GetBit(PINA, 2) == 1) {
+			state = GS_RunGame;
+		}
+
+		else {
+			state = GS_Setup;
+		}
+
 		break;
 
 		case GS_RunGame:
+		if(gameLoaded == 1) {
+			state = GS_RunGame;
+		}
+
+		else {
+			state = GS_Start;
+		}
 
 		break;
 
@@ -340,11 +360,125 @@ int TickFct_GameStart(int state) {
 		break;
 
 		case GS_Setup:
-
+		;
 		break;
 
 		case GS_RunGame:
+		runGame(currMode, numPlayers);
+		break;
 
+		default:
+		;
+		break;
+	}
+}
+
+int TickFct_PaddleMoveOne(int state) {
+	switch(state) {
+		case PDO_Start:
+		state = PDO_Stationary;
+		break;
+
+		case PDO_Stationary:
+		if(GetBit(PINA, 3) == 1) {
+			state = PDO_Right;
+		}
+
+		else if(GetBit(PINA, 4) == 1) {
+			state = PDO_Left;
+		}
+
+		else {
+			state = PDO_Stationary;
+		}
+
+		break;
+
+		case PDO_Left:
+		state = PDO_Stationary;
+		break;
+
+		case PDO_Right:
+		state = PDO_Stationary;
+		break;
+
+		default:
+		state = PDO_Start;
+		break;
+	}
+
+	switch(state) {
+		case PDO_Start:
+		;
+		break;
+
+		case PDO_Stationary:
+		;
+		break;
+
+		case PDO_Left:
+		playerOneLeftPaddleMove();
+		break;
+
+		case PDO_Right:
+		playerOneRightPaddleMove();
+		break;
+
+		default:
+		;
+		break;
+	}
+}
+
+int TickFct_PaddleMoveTwo(int state) {
+	switch(state) {
+		case PDT_Start:
+		state = PDT_Stationary;
+		break;
+
+		case PDT_Stationary:
+		if(GetBit(PINA, 5) == 1) {
+			state = PDT_Right;
+		}
+
+		else if(GetBit(PINA, 6) == 1) {
+			state = PDT_Left;
+		}
+
+		else {
+			state = PDT_Stationary;
+		}
+
+		break;
+
+		case PDT_Left:
+		state = PDT_Stationary;
+		break;
+
+		case PDT_Right:
+		state = PDT_Stationary;
+		break;
+
+		default:
+		state = PDT_Start;
+		break;
+	}
+
+	switch(state) {
+		case PDT_Start:
+		;
+		break;
+
+		case PDT_Stationary:
+		;
+		break;
+
+		case PDT_Left:
+		playerTwoLeftPaddleMove();
+		break;
+
+		case PDT_Right:
+		playerTwoRightPaddleMove();
 		break;
 
 		default:
@@ -379,6 +513,16 @@ int main() {
 	tasks[2].period = gamePeriod;
 	tasks[2].elapsedTime = tasks[2].period;
 	tasks[2].TickFct = &TickFct_GameStart;
+
+	tasks[3].state = PDO_Start;
+	tasks[3].period = gamePeriod;
+	tasks[3].elapsedTime = tasks[3].period;
+	tasks[3].TickFct = &TickFct_PaddleMoveOne;
+
+	tasks[4].state = PDT_Start;
+	tasks[4].period = gamePeriod;
+	tasks[4].elapsedTime = tasks[4].period;
+	tasks[4].TickFct = &TickFct_PaddleMoveTwo;
 
 	// Define timer
 	TimerSet(gamePeriodGCD);
