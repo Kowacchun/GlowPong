@@ -9,8 +9,8 @@ unsigned char counter;
 // Define settings and mechanics
 extern volatile unsigned char currMode;
 extern volatile unsigned char numPlayers;
-extern volatile unsigned char currXTrajectory;
-extern volatile unsigned char currYTrajectory;
+extern volatile signed char currXTrajectory;
+extern volatile signed char currYTrajectory;
 
 extern volatile unsigned char playerOneScore;
 extern volatile unsigned char playerTwoScore;
@@ -87,7 +87,7 @@ void changeMode(unsigned char newMode) {
 // TRAJECTORY FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Changes X trajectory factor ... ex) 1 -> 2 or -1 -> -2 or 2 -> 1 or -2 -> -1
-void changeXTrajectory(unsigned char newXTrajectory) {
+void changeXTrajectory(signed char newXTrajectory) {
 	currXTrajectory = newXTrajectory;
 }
 
@@ -103,12 +103,12 @@ void reverseYTrajectory(signed char currYTrajectory) {
 
 // BALL FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void updateBallPosition(unsigned char currXTrajectory, unsigned char currYTrajectory) {
+void updateBallPosition(signed char currXTrajectory, signed char currYTrajectory) {
 	ballXPosition = ballXPosition + currXTrajectory;
 	ballYPosition = ballYPosition + currYTrajectory;
 }
 
-void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition) {
+void ballCollisionHandler(signed char currXTrajectory, signed char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition) {
 	if(ballXPosition == 7 && currXTrajectory > 0) {
 		reverseXTrajectory(currXTrajectory);
 	}
@@ -117,158 +117,200 @@ void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTraj
 		reverseXTrajectory(currXTrajectory);
 	}
 
-	if(ballYPosition == 6 && currYTrajectory > 0 && (ballXPosition == playerOnePaddleLeft || ballXPosition == playerOnePaddleCenter || 
-	ballXPosition == playerOnePaddleRight)) {
+	if(ballYPosition == 6 && currYTrajectory > 0) {
 		if(ballXPosition == playerOnePaddleLeft) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(-1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-2);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(-1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(-2);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-2);
+				currYTrajectory = -1;
 			}
 		}
 
 		else if(ballXPosition == playerOnePaddleCenter) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(0);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-1);
+				currYTrajectory = -1;
 			}
 		}
 
 		else if(ballXPosition == playerOnePaddleRight) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(2);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(2);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(1);
+				currYTrajectory = -1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(2);
+				currYTrajectory = -1;
 			}
 		}
 	}
 
-	if(ballYPosition == 1 && currYTrajectory < 0 && (ballXPosition == playerTwoPaddleLeft || ballXPosition == playerTwoPaddleCenter || 
-	ballXPosition == playerTwoPaddleRight)) {
+	if(ballYPosition == 1 && currYTrajectory < 0) {
 		if(ballXPosition == playerTwoPaddleLeft) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(2);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(2);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(2);
+				currYTrajectory = 1;
 			}
 		}
 
 		else if(ballXPosition == playerTwoPaddleCenter) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(0);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-1);
+				currYTrajectory = 1;
 			}
 		}
 
 		else if(ballXPosition == playerTwoPaddleRight) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(-1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(-1);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(-2);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-2);
+				currYTrajectory = 1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-2);
+				currYTrajectory = 1;
 			}
 		}
 	}
 
 	if(ballXPosition == 0 && ballYPosition == 6 && playerOnePaddleLeft == 0) {
 		changeXTrajectory(1);
+		currYTrajectory = -1;
 	}
 
 	if(ballXPosition == 0 && ballYPosition == 1 && playerTwoPaddleRight == 0) {
 		changeXTrajectory(1);
+		currYTrajectory = 1;
 	}
 
 	if(ballXPosition == 7 && ballYPosition == 6 && playerOnePaddleRight == 7) {
 		changeXTrajectory(-1);
+		currYTrajectory = -1;
 	}
 
 	if(ballXPosition == 7 && ballYPosition == 1 && playerTwoPaddleLeft == 7) {
 		changeXTrajectory(-1);
+		currYTrajectory = 1;
+	}
+	
+	if(ballYPosition > 7) {
+		playerTwoScore = playerTwoScore + 1;
+		softResetGame();
+	}
+	
+	if(ballYPosition < 0) {
+		playerOneScore = playerOneScore + 1;
+		softResetGame();
 	}
 
 	//----------------NEED TO DECLARE FIRE BALL COLLISIONS UNDER HERE --------------------------
@@ -287,7 +329,7 @@ void fireballCollisionHandler(unsigned char fireballXPosition) {
 
 }
 
-void mirrorCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory) {
+void mirrorCollisionHandler(signed char currXTrajectory, signed char currYTrajectory) {
 
 }
 
@@ -308,7 +350,28 @@ void blinkWinnerLED(unsigned char playerOneScore, unsigned char playerTwoScore) 
 
 // Soft resets the game (paddle position and etc)
 void softResetGame() {
+	
+	//Reset player one
+	playerOnePaddleLeft = 2;
+	playerOnePaddleCenter = 3;
+	playerOnePaddleRight = 4;
 
+	playerOnePaddleVertical = 7;
+	
+	// Reset player two
+	playerTwoPaddleLeft = 4;
+	playerTwoPaddleCenter = 3;
+	playerTwoPaddleRight = 2;
+
+	playerTwoPaddleVertical = 0;
+	
+	// Reset ball position
+	ballXPosition = 3;
+	ballYPosition = 4;
+	
+	// Reset trajectories
+	currXTrajectory = 0;
+	currYTrajectory = 1;
 }
 
 //hard resets the game (resets everything)
@@ -341,7 +404,7 @@ void playerOneLeftPaddleMove() {
 }
 
 void playerTwoLeftPaddleMove() {
-	if(playerTwoPaddleRight != 7) {
+	if(playerTwoPaddleLeft != 7) {
 		playerTwoPaddleLeft = playerTwoPaddleLeft + 1;
 		playerTwoPaddleCenter = playerTwoPaddleCenter + 1;
 		playerTwoPaddleRight = playerTwoPaddleRight + 1;

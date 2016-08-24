@@ -16,8 +16,8 @@ unsigned char counter = 0;
 // Define settings and mechanics
 unsigned char currMode = 1;
 unsigned char numPlayers = 1;
-unsigned char currXTrajectory = 0;
-unsigned char currYTrajectory = 1;
+signed char currXTrajectory = 0;
+signed char currYTrajectory = 1;
 
 unsigned char playerOneScore = 0;
 unsigned char playerTwoScore = 0;

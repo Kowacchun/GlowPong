@@ -17,7 +17,7 @@ void changeMode(unsigned char newMode);
 // TRAJECTORY FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Changes X trajectory factor ... ex) 1 -> 2 or -1 -> -2 or 2 -> 1 or -2 -> -1
-void changeXTrajectory(unsigned char newXTrajectory);
+void changeXTrajectory(signed char newXTrajectory);
 
 // Reverses current X trajectory
 void reverseXTrajectory(signed char currXTrajectory);
@@ -27,9 +27,9 @@ void reverseYTrajectory(signed char currYTrajectory);
 
 // BALL FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void updateBallPosition(unsigned char currXTrajectory, unsigned char currYTrajectory);
+void updateBallPosition(signed char currXTrajectory, signed char currYTrajectory);
 
-void ballCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition);
+void ballCollisionHandler(signed char currXTrajectory, signed char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition);
 
 // SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -37,7 +37,7 @@ void updateFireballPosition(unsigned char fireballXPosition);
 
 void fireballCollisionHandler(unsigned char fireballXPosition);
 
-void mirrorCollisionHandler(unsigned char currXTrajectory, unsigned char currYTrajectory);
+void mirrorCollisionHandler(signed char currXTrajectory, signed char currYTrajectory);
 
 // END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Displays scores constantly for two players.
