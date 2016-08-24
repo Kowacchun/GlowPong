@@ -27,13 +27,13 @@
 // ----------------------------------------------------------------------------
 
 #ifndef MAX7219_DIN
-#define MAX7219_DIN		PA0	// DI,	Pin 3 on LED8x8 Board
+#define MAX7219_DIN		PD0	// DI,	Pin 3 on LED8x8 Board
 #endif
 #ifndef MAX7219_CS
-#define MAX7219_CS		PA1	// CS,	Pin 4 on LED8x8 Board
+#define MAX7219_CS		PD1	// CS,	Pin 4 on LED8x8 Board
 #endif
 #ifndef MAX7219_CLK
-#define MAX7219_CLK		PA2	// CLK,	Pin 5 on LED8x8 Board
+#define MAX7219_CLK		PD2	// CLK,	Pin 5 on LED8x8 Board
 #endif
 
 // ----------------------------------------------------------------------------

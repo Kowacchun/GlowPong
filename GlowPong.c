@@ -3,12 +3,15 @@
 #include "io.h"
 #include "timer.h"
 #include "scheduler.h"
+#include "max7219led8x8.h"
 
 #include "gamefunctions.h"
 
 extern volatile unsigned char TimerFlag;
 
 // MANY VARIABLE DECLARATIONS INCOMING!
+
+unsigned char counter = 0;
 
 // Define settings and mechanics
 unsigned char currMode = 1;
@@ -69,7 +72,7 @@ unsigned char playerTwoPaddleVertical = 0;
 
 // Ball position
 unsigned char ballXPosition = 3;
-unsigned char ballYPosition = 6;
+unsigned char ballYPosition = 4;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -83,7 +86,7 @@ const unsigned char totalMatches = 5;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Task array
-task tasks[tasksNum];
+task tasks[5];
 
 // Output variables
 unsigned char PS_B;
@@ -201,7 +204,7 @@ int TickFct_PlayerSelection(int state) {
 int TickFct_ModeSelection(int state) {
 	switch(state) {
 		case MS_Start:
-		state = MS_NormalRelease;
+		state = MS_Normal;
 		break;
 
 		case MS_Normal:
@@ -219,10 +222,10 @@ int TickFct_ModeSelection(int state) {
 		if(GetBit(PINA, 1) == 1 && gameLoaded != 1) {
 			state = MS_Fireball;
 		}
-			
+		
 		else {
 			state = MS_NormalRelease;
-		}	
+		}
 
 		break;
 
@@ -250,7 +253,7 @@ int TickFct_ModeSelection(int state) {
 
 		case MS_Invert:
 		if(GetBit(PINA, 1) == 0 && gameLoaded != 1) {
-			state = MS_InvertRelease;	
+			state = MS_InvertRelease;
 		}
 		
 		else {
@@ -328,7 +331,7 @@ int TickFct_GameStart(int state) {
 		break;
 
 		case GS_Setup:
-		if(GetBit(PINA, 2) == 1) {
+		if(GetBit(PINA, 2) == 0) {
 			state = GS_RunGame;
 		}
 
@@ -364,13 +367,20 @@ int TickFct_GameStart(int state) {
 		break;
 
 		case GS_RunGame:
+		gameLoaded = 1;
+		counter = counter + 1;
 		runGame(currMode, numPlayers);
+		
+		max7219b_set(ballXPosition, ballYPosition);
+		
 		break;
 
 		default:
 		;
 		break;
 	}
+	
+	return state;
 }
 
 int TickFct_PaddleMoveOne(int state) {
@@ -380,11 +390,11 @@ int TickFct_PaddleMoveOne(int state) {
 		break;
 
 		case PDO_Stationary:
-		if(GetBit(PINA, 3) == 1) {
+		if(GetBit(PINA, 3) == 0) {
 			state = PDO_Right;
 		}
 
-		else if(GetBit(PINA, 4) == 1) {
+		else if(GetBit(PINA, 4) == 0) {
 			state = PDO_Left;
 		}
 
@@ -409,54 +419,96 @@ int TickFct_PaddleMoveOne(int state) {
 
 	switch(state) {
 		case PDO_Start:
-		;
+		
+		max7219b_set(playerOnePaddleLeft, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleCenter, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleRight, playerOnePaddleVertical);
+
 		break;
 
 		case PDO_Stationary:
-		;
+		
+		max7219b_set(playerOnePaddleLeft, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleCenter, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleRight, playerOnePaddleVertical);
+
 		break;
 
 		case PDO_Left:
 		playerOneLeftPaddleMove();
+		
+		max7219b_set(playerOnePaddleLeft, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleCenter, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleRight, playerOnePaddleVertical);
+
 		break;
 
 		case PDO_Right:
 		playerOneRightPaddleMove();
+		
+		max7219b_set(playerOnePaddleLeft, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleCenter, playerOnePaddleVertical);
+		max7219b_set(playerOnePaddleRight, playerOnePaddleVertical);
+
 		break;
 
 		default:
 		;
 		break;
 	}
+	
+	return state;
 }
 
 int TickFct_PaddleMoveTwo(int state) {
 	switch(state) {
 		case PDT_Start:
-		state = PDT_Stationary;
+		if(numPlayers == 2) {
+			state = PDT_Stationary;
+		}
+		else{
+			state = PDT_Start;
+		}
 		break;
 
 		case PDT_Stationary:
-		if(GetBit(PINA, 5) == 1) {
-			state = PDT_Right;
-		}
+		if(numPlayers == 2) {
+			if(GetBit(PINA, 5) == 0) {
+				state = PDT_Right;
+			}
 
-		else if(GetBit(PINA, 6) == 1) {
-			state = PDT_Left;
-		}
+			else if(GetBit(PINA, 6) == 0) {
+				state = PDT_Left;
+			}
 
+			else {
+				state = PDT_Stationary;
+			}
+		}
+		
 		else {
-			state = PDT_Stationary;
+			state = PDT_Start;
 		}
-
 		break;
 
 		case PDT_Left:
-		state = PDT_Stationary;
+		if(numPlayers == 2) {
+			state = PDT_Stationary;
+		}
+		
+		else {
+			state = PDT_Start;
+		}
 		break;
 
 		case PDT_Right:
-		state = PDT_Stationary;
+		if(numPlayers == 2) {
+			state = PDT_Stationary;
+		}
+		
+		else {
+			state = PDT_Start;
+		}
 		break;
 
 		default:
@@ -466,25 +518,45 @@ int TickFct_PaddleMoveTwo(int state) {
 
 	switch(state) {
 		case PDT_Start:
-		;
+
+		max7219b_set(playerTwoPaddleLeft, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleCenter, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleRight, playerTwoPaddleVertical);
+		
 		break;
 
 		case PDT_Stationary:
-		;
+		
+		max7219b_set(playerTwoPaddleLeft, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleCenter, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleRight, playerTwoPaddleVertical);
+
 		break;
 
 		case PDT_Left:
 		playerTwoLeftPaddleMove();
+		
+		max7219b_set(playerTwoPaddleLeft, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleCenter, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleRight, playerTwoPaddleVertical);
+		
 		break;
 
 		case PDT_Right:
 		playerTwoRightPaddleMove();
+		
+		max7219b_set(playerTwoPaddleLeft, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleCenter, playerTwoPaddleVertical);
+		max7219b_set(playerTwoPaddleRight, playerTwoPaddleVertical);
+		
 		break;
 
 		default:
 		;
 		break;
 	}
+	
+	return state;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -532,6 +604,9 @@ int main() {
 
 	while(1) {
 		
+		max7219_init();
+		max7219b_clearScr();
+		
 		for(i = 0 ; i < tasksNum ; i++) {
 			
 			if(tasks[i].elapsedTime >= tasks[i].period) {
@@ -541,6 +616,8 @@ int main() {
 
 			tasks[i].elapsedTime += gamePeriodGCD;
 		}
+
+		max7219b_out();
 
 		while(!TimerFlag) {}
 

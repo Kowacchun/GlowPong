@@ -25,30 +25,30 @@
 // ----------------------------------------------------------------------------
 
 void max7219_byte(uint8_t data) {
-	PORTA &= ~(1 << MAX7219_CS);	// Set to LOW
+	PORTD &= ~(1 << MAX7219_CS);	// Set to LOW
 	for(uint8_t i = 8; i >= 1; i--)
 	{
-		PORTA &= ~(1 << MAX7219_CLK);	// Set to LOW
+		PORTD &= ~(1 << MAX7219_CLK);	// Set to LOW
 		if ((data & 0x80) != 0)			// Mask the MSB of the data
-			PORTA |= (1 << MAX7219_DIN);	// Set to HIGH
+			PORTD |= (1 << MAX7219_DIN);	// Set to HIGH
 		else
-			PORTA &= ~(1 << MAX7219_DIN);	// Set to LOW
+			PORTD &= ~(1 << MAX7219_DIN);	// Set to LOW
 		data = data<<1;
-		PORTA |= (1 << MAX7219_CLK);		// Set to HIGH
+		PORTD |= (1 << MAX7219_CLK);		// Set to HIGH
 	}
 }
 
 void max7219_word(uint8_t address, uint8_t data) {
-	PORTA &= ~(1 << MAX7219_CS);	// Set to LOW
+	PORTD &= ~(1 << MAX7219_CS);	// Set to LOW
 	max7219_byte(address);			//
 	max7219_byte(data);				//
-	PORTA |= (1 << MAX7219_CS);		// Set to HIGH
+	PORTD |= (1 << MAX7219_CS);		// Set to HIGH
 }
 
 void max7219_init(void) {
-	DDRA |= (1 << MAX7219_CLK);	// Set port as output
-	DDRA |= (1 << MAX7219_CS);	// Set port as output
-	DDRA |= (1 << MAX7219_DIN);	// Set port as output
+	DDRD |= (1 << MAX7219_CLK);	// Set port as output
+	DDRD |= (1 << MAX7219_CS);	// Set port as output
+	DDRD |= (1 << MAX7219_DIN);	// Set port as output
 	_delay_ms(50);	// TODO: Q: Is this necessary?
 	max7219_word(0x09, 0x00);	// Decode: BCD
 	max7219_word(0x0a, 0x03);	// Brightness

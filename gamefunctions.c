@@ -1,7 +1,11 @@
 #include <avr/io.h>
+#include <stdlib.h>
 #include "gamefunctions.h"
 
 //external variables
+
+unsigned char counter;
+
 // Define settings and mechanics
 extern volatile unsigned char currMode;
 extern volatile unsigned char numPlayers;
@@ -314,25 +318,64 @@ void hardResetGame() {
 
 // Runs the game with the settings set by player 1
 void runGame(unsigned char currMode, unsigned char numPlayers) {
-	updateBallPosition(currXTrajectory, currYTrajectory);
+	if(counter == 10) {
+		updateBallPosition(currXTrajectory, currYTrajectory);
+		counter = 0;
+	}
 	ballCollisionHandler(currXTrajectory, currYTrajectory, ballXPosition, ballYPosition);
+
+	if(numPlayers == 1) {
+		ComputerAI();
+	}
 }
 
 
 // PADDLE MOVEMENT FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void playerOneLeftPaddleMove() {
-	
+	if(playerOnePaddleLeft != 0) {
+		playerOnePaddleLeft = playerOnePaddleLeft - 1;
+		playerOnePaddleCenter = playerOnePaddleCenter - 1;
+		playerOnePaddleRight = playerOnePaddleRight - 1;
+	}
 }
 
 void playerTwoLeftPaddleMove() {
-	
+	if(playerTwoPaddleRight != 7) {
+		playerTwoPaddleLeft = playerTwoPaddleLeft + 1;
+		playerTwoPaddleCenter = playerTwoPaddleCenter + 1;
+		playerTwoPaddleRight = playerTwoPaddleRight + 1;
+	}
 }
 
 void playerOneRightPaddleMove() {
-	
+	if(playerOnePaddleRight != 7) {
+		playerOnePaddleLeft = playerOnePaddleLeft + 1;
+		playerOnePaddleCenter = playerOnePaddleCenter + 1;
+		playerOnePaddleRight = playerOnePaddleRight + 1;
+	}
 }
 
 void playerTwoRightPaddleMove() {
-	
+	if(playerTwoPaddleRight != 0) {
+		playerTwoPaddleLeft = playerTwoPaddleLeft - 1;
+		playerTwoPaddleCenter = playerTwoPaddleCenter - 1;
+		playerTwoPaddleRight = playerTwoPaddleRight - 1;
+	}
+}
+
+// AI MOVEMENT CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void ComputerAI() {
+	unsigned char followChance = rand() % 100;
+
+	if(followChance == 1) {
+		if(ballXPosition < playerTwoPaddleRight) {
+			playerTwoRightPaddleMove();
+		}
+
+		else if(ballXPosition > playerTwoPaddleLeft) {
+			playerTwoLeftPaddleMove();
+		}
+	}
 }

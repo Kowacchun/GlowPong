@@ -70,4 +70,8 @@ void playerOneRightPaddleMove();
 
 void playerTwoRightPaddleMove();
 
+// AI MOVEMENT CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void ComputerAI();
+
 #endif
