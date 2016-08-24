@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include "gamefunctions.h"
+#include "utilities.h"
 
 //external variables
 
@@ -92,13 +93,13 @@ void changeXTrajectory(signed char newXTrajectory) {
 }
 
 // Reverses current X trajectory
-void reverseXTrajectory(signed char currXTrajectory) {
-	currXTrajectory = currXTrajectory * -1;
+void reverseXTrajectory(signed char prevXTrajectory) {
+	currXTrajectory = prevXTrajectory * -1;
 }
 
 // Reverses current Y trajectory
-void reverseYTrajectory(signed char currYTrajectory) {
-	currYTrajectory = currYTrajectory * -1;
+void reverseYTrajectory(signed char prevYTrajectory) {
+	currYTrajectory = prevYTrajectory * -1;
 }
 
 // BALL FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -108,16 +109,25 @@ void updateBallPosition(signed char currXTrajectory, signed char currYTrajectory
 	ballYPosition = ballYPosition + currYTrajectory;
 }
 
-void ballCollisionHandler(signed char currXTrajectory, signed char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition) {
+void ballCollisionHandler(unsigned char ballXPosition, unsigned char ballYPosition) {
+	
 	if(ballXPosition == 7 && currXTrajectory > 0) {
 		reverseXTrajectory(currXTrajectory);
 	}
 
-	if(ballXPosition == 0 && currXTrajectory < 0) {
+	else if(ballXPosition == 0 && currXTrajectory < 0) {
 		reverseXTrajectory(currXTrajectory);
 	}
+	
+	else if(ballXPosition == 6 && currXTrajectory == 2) {
+		changeXTrajectory(1);
+	}
+	
+	else if(ballXPosition == 1 && currXTrajectory == -2) {
+		changeXTrajectory(-1);
+	}
 
-	if(ballYPosition == 6 && currYTrajectory > 0) {
+	else if(ballYPosition == 6 && currYTrajectory > 0) {
 		if(ballXPosition == playerOnePaddleLeft) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(-1);
@@ -200,7 +210,7 @@ void ballCollisionHandler(signed char currXTrajectory, signed char currYTrajecto
 		}
 	}
 
-	if(ballYPosition == 1 && currYTrajectory < 0) {
+	else if(ballYPosition == 1 && currYTrajectory < 0) {
 		if(ballXPosition == playerTwoPaddleLeft) {
 			if(currXTrajectory == 0) {
 				changeXTrajectory(1);
@@ -283,39 +293,37 @@ void ballCollisionHandler(signed char currXTrajectory, signed char currYTrajecto
 		}
 	}
 
-	if(ballXPosition == 0 && ballYPosition == 6 && playerOnePaddleLeft == 0) {
+	else if(ballXPosition == 0 && ballYPosition == 6 && playerOnePaddleLeft == 0) {
 		changeXTrajectory(1);
 		currYTrajectory = -1;
 	}
 
-	if(ballXPosition == 0 && ballYPosition == 1 && playerTwoPaddleRight == 0) {
+	else if(ballXPosition == 0 && ballYPosition == 1 && playerTwoPaddleRight == 0) {
 		changeXTrajectory(1);
 		currYTrajectory = 1;
 	}
 
-	if(ballXPosition == 7 && ballYPosition == 6 && playerOnePaddleRight == 7) {
+	else if(ballXPosition == 7 && ballYPosition == 6 && playerOnePaddleRight == 7) {
 		changeXTrajectory(-1);
 		currYTrajectory = -1;
 	}
 
-	if(ballXPosition == 7 && ballYPosition == 1 && playerTwoPaddleLeft == 7) {
+	else if(ballXPosition == 7 && ballYPosition == 1 && playerTwoPaddleLeft == 7) {
 		changeXTrajectory(-1);
 		currYTrajectory = 1;
 	}
 	
-	if(ballYPosition > 7) {
+	else if(ballYPosition > 7) {
 		playerTwoScore = playerTwoScore + 1;
 		softResetGame();
 	}
 	
-	if(ballYPosition < 0) {
+	else if(ballYPosition < 0) {
 		playerOneScore = playerOneScore + 1;
 		softResetGame();
 	}
 
 	//----------------NEED TO DECLARE FIRE BALL COLLISIONS UNDER HERE --------------------------
-
-
 
 }
 
@@ -385,8 +393,8 @@ void runGame(unsigned char currMode, unsigned char numPlayers) {
 		updateBallPosition(currXTrajectory, currYTrajectory);
 		counter = 0;
 	}
-	ballCollisionHandler(currXTrajectory, currYTrajectory, ballXPosition, ballYPosition);
-
+	ballCollisionHandler(ballXPosition, ballYPosition);
+	
 	if(numPlayers == 1) {
 		ComputerAI();
 	}
@@ -432,7 +440,7 @@ void playerTwoRightPaddleMove() {
 void ComputerAI() {
 	unsigned char followChance = rand() % 100;
 
-	if(followChance == 1) {
+	if(followChance < 5) {
 		if(ballXPosition < playerTwoPaddleRight) {
 			playerTwoRightPaddleMove();
 		}

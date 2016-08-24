@@ -20,16 +20,16 @@ void changeMode(unsigned char newMode);
 void changeXTrajectory(signed char newXTrajectory);
 
 // Reverses current X trajectory
-void reverseXTrajectory(signed char currXTrajectory);
+void reverseXTrajectory(signed char prevXTrajectory);
 
 // Reverses current Y trajectory
-void reverseYTrajectory(signed char currYTrajectory);
+void reverseYTrajectory(signed char prevYTrajectory);
 
 // BALL FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void updateBallPosition(signed char currXTrajectory, signed char currYTrajectory);
 
-void ballCollisionHandler(signed char currXTrajectory, signed char currYTrajectory, unsigned char ballXPosition, unsigned char ballYPosition);
+void ballCollisionHandler(unsigned char ballXPosition, unsigned char ballYPosition);
 
 // SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
