@@ -36,7 +36,7 @@ unsigned char lastTouch = 1;
 unsigned char fireballXPosition = 0;
 unsigned char fireballYPosition = 4;
 
-unsigned char fireballTrajectory = 1;
+signed char fireballTrajectory = 1;
 
 // Fireball Flag
 unsigned char fireballOn = 0;
@@ -288,33 +288,45 @@ int TickFct_ModeSelection(int state) {
 		case MS_Normal:
 		MS_B = SetBit(0, 2, 1);
 		changeMode(1);
+		mirrorOn = 0;
+		fireballOn = 0;
 		break;
 
 		case MS_NormalRelease:
 		MS_B = SetBit(0, 2, 1);
 		changeMode(1);
+		mirrorOn = 0;
+		fireballOn = 0;
 		break;
 
 		case MS_Fireball:
 		MS_B = SetBit(0, 3, 1);
 		changeMode(2);
+		mirrorOn = 0;
+		fireballOn = 1;
 		break;
 
 		case MS_FireballRelease:
 		MS_B = SetBit(0, 3, 1);
 		changeMode(2);
+		mirrorOn = 0;
+		fireballOn = 1;
 		break;
 
 		case MS_Invert:
 		MS_B = SetBit(0, 2, 1);
 		MS_B = SetBit(MS_B, 3, 1);
 		changeMode(3);
+		fireballOn = 0;
+		mirrorOn = 1;
 		break;
 
 		case MS_InvertRelease:
 		MS_B = SetBit(0, 2, 1);
 		MS_B = SetBit(MS_B, 3, 1);
 		changeMode(3);
+		fireballOn = 0;
+		mirrorOn = 1;
 		break;
 
 		default:
@@ -376,6 +388,10 @@ int TickFct_GameStart(int state) {
 		
 		max7219b_set(ballXPosition, ballYPosition);
 		
+		if(fireballOn == 1) {
+			max7219b_set(fireballXPosition, fireballYPosition);
+		}
+		
 		break;
 
 		default:
@@ -389,7 +405,12 @@ int TickFct_GameStart(int state) {
 int TickFct_PaddleMoveOne(int state) {
 	switch(state) {
 		case PDO_Start:
-		state = PDO_Stationary;
+		if(gameLoaded == 1) {
+			state = PDO_Stationary;
+		}
+		else {
+			state = PDO_Start;
+		}
 		break;
 
 		case PDO_Stationary:
@@ -400,6 +421,11 @@ int TickFct_PaddleMoveOne(int state) {
 		else if(GetBit(PINA, 4) == 0) {
 			state = PDO_Left;
 		}
+		
+		else if(gameLoaded == 0) {
+			state = PDO_Start;
+		}
+
 
 		else {
 			state = PDO_Stationary;
@@ -466,7 +492,7 @@ int TickFct_PaddleMoveOne(int state) {
 int TickFct_PaddleMoveTwo(int state) {
 	switch(state) {
 		case PDT_Start:
-		if(numPlayers == 2) {
+		if(numPlayers == 2 && gameLoaded == 1) {
 			state = PDT_Stationary;
 		}
 		else{
@@ -482,6 +508,10 @@ int TickFct_PaddleMoveTwo(int state) {
 
 			else if(GetBit(PINA, 6) == 0) {
 				state = PDT_Left;
+			}
+			
+			else if(gameLoaded == 0) {
+				state = PDT_Start;
 			}
 
 			else {

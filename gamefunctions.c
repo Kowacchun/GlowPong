@@ -36,7 +36,7 @@ extern volatile unsigned char lastTouch;
 extern volatile unsigned char fireballXPosition;
 extern volatile unsigned char fireballYPosition;
 
-extern volatile unsigned char fireballTrajectory;
+extern volatile signed char fireballTrajectory;
 
 // Fireball Flag
 extern volatile unsigned char fireballOn;
@@ -140,26 +140,31 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 			if(currXTrajectory == 0) {
 				changeXTrajectory(-1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-2);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(-1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(-2);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-2);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 		}
 
@@ -167,26 +172,31 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 			if(currXTrajectory == 0) {
 				changeXTrajectory(0);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 		}
 
@@ -194,26 +204,31 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 			if(currXTrajectory == 0) {
 				changeXTrajectory(1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(2);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(2);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(1);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(2);
 				currYTrajectory = -1;
+				lastTouch = 1;
 			}
 		}
 	}
@@ -223,26 +238,31 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 			if(currXTrajectory == 0) {
 				changeXTrajectory(1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(2);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(2);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(2);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 		}
 
@@ -250,26 +270,31 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 			if(currXTrajectory == 0) {
 				changeXTrajectory(0);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 		}
 
@@ -277,26 +302,31 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 			if(currXTrajectory == 0) {
 				changeXTrajectory(-1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == 1) {
 				changeXTrajectory(-1);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == 2) {
 				changeXTrajectory(-2);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == -1) {
 				changeXTrajectory(-2);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 
 			else if(currXTrajectory == -2) {
 				changeXTrajectory(-2);
 				currYTrajectory = 1;
+				lastTouch = 2;
 			}
 		}
 	}
@@ -304,21 +334,25 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 	else if(ballXPosition == 0 && ballYPosition == 6 && playerOnePaddleLeft == 0) {
 		changeXTrajectory(1);
 		currYTrajectory = -1;
+		lastTouch = 1;
 	}
 
 	else if(ballXPosition == 0 && ballYPosition == 1 && playerTwoPaddleRight == 0) {
 		changeXTrajectory(1);
 		currYTrajectory = 1;
+		lastTouch = 2;
 	}
 
 	else if(ballXPosition == 7 && ballYPosition == 6 && playerOnePaddleRight == 7) {
 		changeXTrajectory(-1);
 		currYTrajectory = -1;
+		lastTouch = 1;
 	}
 
 	else if(ballXPosition == 7 && ballYPosition == 1 && playerTwoPaddleLeft == 7) {
 		changeXTrajectory(-1);
 		currYTrajectory = 1;
+		lastTouch = 2;
 	}
 	
 	else if(ballYPosition > 7) {
@@ -332,21 +366,42 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) 
 	}
 
 	//----------------NEED TO DECLARE FIRE BALL COLLISIONS UNDER HERE --------------------------
+	
+	else if(ballYPosition == fireballYPosition && ballXPosition == fireballXPosition && fireballOn == 1) {
+		if(lastTouch == 1) {
+			playerTwoScore = playerTwoScore + 1;
+			softResetGame();
+		}
+		
+		else if(lastTouch == 2) {
+			playerOneScore = playerOneScore + 1;
+			softResetGame();
+		}
+	}
 
 }
 
 // SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void updateFireballPosition(unsigned char fireballXPosition) {
-
+void updateFireballPosition() {
+	fireballXPosition = fireballXPosition + fireballTrajectory;
 }
 
 void fireballCollisionHandler() {
-
+	if(fireballXPosition == 0 && fireballTrajectory == -1) {
+		fireballTrajectory = 1;
+	}
+	
+	if(fireballXPosition == 7 && fireballTrajectory == 1) {
+		fireballTrajectory = -1;
+	}
 }
 
-void mirrorCollisionHandler(signed char currXTrajectory, signed char currYTrajectory) {
-
+void mirrorCollisionHandler() {
+	
+	if(ballYPosition == mirrorLocation) {
+		reverseXTrajectory(currXTrajectory);
+	}
 }
 
 // END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -453,6 +508,11 @@ void softResetGame() {
 	// Reset trajectories
 	currXTrajectory = 0;
 	currYTrajectory = 1;
+	
+	fireballXPosition = 0;
+	fireballYPosition = 4;
+
+	fireballTrajectory = 1;
 }
 
 //hard resets the game (resets everything)
@@ -528,10 +588,16 @@ void hardResetGame() {
 void runGame(unsigned char currMode, unsigned char numPlayers) {
 	if(counter == 10 && winnerDecided != 1) {
 		updateBallPosition(currXTrajectory, currYTrajectory);
+		updateFireballPosition();
 		counter = 0;
+		
+		if(mirrorOn == 1) {
+			mirrorCollisionHandler(currXTrajectory);
+		}
 	}
 	
 	ballCollisionHandler(ballXPosition, ballYPosition);
+	fireballCollisionHandler();
 	
 	if(numPlayers == 1) {
 		ComputerAI();

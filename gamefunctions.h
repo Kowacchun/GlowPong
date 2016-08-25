@@ -33,11 +33,11 @@ void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition);
 
 // SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void updateFireballPosition(unsigned char fireballXPosition);
+void updateFireballPosition();
 
 void fireballCollisionHandler();
 
-void mirrorCollisionHandler(signed char currXTrajectory, signed char currYTrajectory);
+void mirrorCollisionHandler();
 
 // END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Displays scores constantly for two players.
