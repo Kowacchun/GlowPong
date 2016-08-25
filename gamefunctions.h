@@ -29,24 +29,24 @@ void reverseYTrajectory(signed char prevYTrajectory);
 
 void updateBallPosition(signed char currXTrajectory, signed char currYTrajectory);
 
-void ballCollisionHandler(unsigned char ballXPosition, unsigned char ballYPosition);
+void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition);
 
 // SPECIAL MODE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void updateFireballPosition(unsigned char fireballXPosition);
 
-void fireballCollisionHandler(unsigned char fireballXPosition);
+void fireballCollisionHandler();
 
 void mirrorCollisionHandler(signed char currXTrajectory, signed char currYTrajectory);
 
 // END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Displays scores constantly for two players.
 // AI also counts as player 2
-void displayScores(unsigned char playerOneScore, unsigned char playerTwoScore);
+void displayScores();
 
 // Blinks the LED for the winning player's score LEDs
 // Requires 2 LEDs
-void blinkWinnerLED(unsigned char playerOneScore, unsigned char playerTwoScore);
+void blinkWinnerLED(unsigned char playerOneStatus, unsigned char playerTwoStatus);
 
 // GEMU FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

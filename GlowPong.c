@@ -12,6 +12,8 @@ extern volatile unsigned char TimerFlag;
 // MANY VARIABLE DECLARATIONS INCOMING!
 
 unsigned char counter = 0;
+unsigned char winnerDecided = 0;
+unsigned char blinkCounter = 1;
 
 // Define settings and mechanics
 unsigned char currMode = 1;
@@ -71,8 +73,8 @@ unsigned char playerTwoPaddleVertical = 0;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Ball position
-unsigned char ballXPosition = 3;
-unsigned char ballYPosition = 4;
+signed char ballXPosition = 3;
+signed char ballYPosition = 4;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -369,6 +371,7 @@ int TickFct_GameStart(int state) {
 		case GS_RunGame:
 		gameLoaded = 1;
 		counter = counter + 1;
+		blinkCounter = blinkCounter + 1;
 		runGame(currMode, numPlayers);
 		
 		max7219b_set(ballXPosition, ballYPosition);
@@ -567,7 +570,7 @@ int main() {
 	DDRA = 0x00; PORTA = 0xFF;
 	DDRB = 0xFF; PORTB = 0x00;
 
-	DDRC = 0x00; PORTC = 0xFF;
+	DDRC = 0xFF; PORTC = 0x00;
 	DDRD = 0xFF; PORTD = 0x00;
 
 	// Define tasks

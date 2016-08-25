@@ -5,7 +5,15 @@
 
 //external variables
 
-unsigned char counter;
+extern volatile unsigned char counter;
+extern volatile unsigned char winnerDecided;
+
+unsigned char playerOne = 0x00;
+unsigned char playerTwo = 0x00;
+
+unsigned char currDisplay = 0x00;
+
+extern unsigned char blinkCounter;
 
 // Define settings and mechanics
 extern volatile unsigned char currMode;
@@ -65,8 +73,8 @@ extern volatile unsigned char playerTwoPaddleVertical;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Ball position
-extern volatile unsigned char ballXPosition;
-extern volatile unsigned char ballYPosition;
+extern volatile signed char ballXPosition;
+extern volatile signed char ballYPosition;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SETTING FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,7 +117,7 @@ void updateBallPosition(signed char currXTrajectory, signed char currYTrajectory
 	ballYPosition = ballYPosition + currYTrajectory;
 }
 
-void ballCollisionHandler(unsigned char ballXPosition, unsigned char ballYPosition) {
+void ballCollisionHandler(signed char ballXPosition, signed char ballYPosition) {
 	
 	if(ballXPosition == 7 && currXTrajectory > 0) {
 		reverseXTrajectory(currXTrajectory);
@@ -333,7 +341,7 @@ void updateFireballPosition(unsigned char fireballXPosition) {
 
 }
 
-void fireballCollisionHandler(unsigned char fireballXPosition) {
+void fireballCollisionHandler() {
 
 }
 
@@ -344,14 +352,79 @@ void mirrorCollisionHandler(signed char currXTrajectory, signed char currYTrajec
 // END GAME FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Displays scores constantly for two players.
 // AI also counts as player 2
-void displayScores(unsigned char playerOneScore, unsigned char playerTwoScore) {
-
+void displayScores() {
+	
+	if(playerOneScore == 1) {
+		playerOne = SetBit(0, 0, 1);
+	}
+	
+	if(playerTwoScore == 1) {
+		playerTwo = SetBit(0, 3, 1);
+	}
+	
+	if(playerOneScore == 2) {
+		playerOne = SetBit(0, 0, 1);
+		playerOne = SetBit(playerOne, 1, 1);
+	}
+	
+	if(playerTwoScore == 2) {
+		playerTwo = SetBit(0, 3, 1);
+		playerTwo = SetBit(playerTwo, 4, 1);
+	}	
+	
+	if(playerOneScore == 3) {
+		playerOne = SetBit(0, 0, 1);
+		playerOne = SetBit(playerOne, 1, 1);
+		playerOne = SetBit(playerOne, 2, 1);
+		winnerDecided = 1;
+	}
+	
+	if(playerTwoScore == 3) {
+		playerTwo = SetBit(0, 3, 1);
+		playerTwo = SetBit(playerTwo, 4, 1);
+		playerTwo = SetBit(playerTwo, 5, 1);
+		winnerDecided = 1;
+	}
+	
+	PORTC = playerOne | playerTwo;
 }
 
 // Blinks the LED for the winning player's score LEDs
 // Requires 2 LEDs
-void blinkWinnerLED(unsigned char playerOneScore, unsigned char playerTwoScore) {
-
+void blinkWinnerLED(unsigned char playerOneStatus, unsigned char playerTwoStatus) {
+	
+	unsigned char blinker = 0x00;
+	unsigned char nonBlinker = 0x00;
+	
+	if(playerOneScore == 3) {
+		blinker = playerOneStatus;
+		nonBlinker = playerTwoStatus;
+	} 
+	
+	if(playerTwoScore == 3) {
+		blinker = playerTwoStatus;
+		nonBlinker = playerOneStatus;
+	}
+	
+	if(blinkCounter == 1) {
+		currDisplay = 0x00 | nonBlinker;
+	}
+	
+	if(blinkCounter != 30 && blinkCounter % 10 == 0) {
+		currDisplay = blinker | nonBlinker;
+	}
+	
+	if(blinkCounter % 20 == 0) {
+		currDisplay = 0x00 | nonBlinker;
+	}
+	
+	if(blinkCounter == 30) {
+		blinkCounter = 1;
+		hardResetGame();
+	}
+	
+	PORTC = currDisplay;
+	
 }
 
 // GEMU FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -384,19 +457,90 @@ void softResetGame() {
 
 //hard resets the game (resets everything)
 void hardResetGame() {
+	winnerDecided = 0;
+	playerOne = 0x00;
+	playerTwo = 0x00;
+	
+	currDisplay = 0x00;
+	
+	// Define settings and mechanics
+	currMode = 1;
+	numPlayers = 1;
+	currXTrajectory = 0;
+	currYTrajectory = 1;
 
+	playerOneScore = 0;
+	playerTwoScore = 0;
+
+	// Flag that tells you if the game is running (when on, it does not let you change settings anymore)
+	gameLoaded = 0;
+
+	// Who touched the ball last - player 1 is 1, player 2 is 2
+	lastTouch = 1;
+
+	// Special mode objects ---------------------------------
+	// Fireball
+	fireballXPosition = 0;
+	fireballYPosition = 4;
+
+	fireballTrajectory = 1;
+
+	// Fireball Flag
+	fireballOn = 0;
+
+	//-----------------------------------
+
+	// Mirror only has Y axis placement
+	mirrorLocation = 4;
+
+	// Mirror Flag
+	mirrorOn = 0;
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Player 1 Paddle
+	// These are the bit positions (NOT the actual values)
+	// Moving right will increase the values
+	// Moving left will decrease the values
+	playerOnePaddleLeft = 2;
+	playerOnePaddleCenter = 3;
+	playerOnePaddleRight = 4;
+
+	playerOnePaddleVertical = 7;
+
+	// Player 2 Paddle
+	// These are the bit positions (NOT the actual values)
+	// Moving right will decrease the values
+	// Moving left will increase the values
+	playerTwoPaddleLeft = 4;
+	playerTwoPaddleCenter = 3;
+	playerTwoPaddleRight = 2;
+
+	playerTwoPaddleVertical = 0;
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	// Ball position
+	ballXPosition = 3;
+	ballYPosition = 4;
 }
 
 // Runs the game with the settings set by player 1
 void runGame(unsigned char currMode, unsigned char numPlayers) {
-	if(counter == 10) {
+	if(counter == 10 && winnerDecided != 1) {
 		updateBallPosition(currXTrajectory, currYTrajectory);
 		counter = 0;
 	}
+	
 	ballCollisionHandler(ballXPosition, ballYPosition);
 	
 	if(numPlayers == 1) {
 		ComputerAI();
+	}
+	
+	displayScores();
+	
+	if(playerOneScore == 3 || playerTwoScore == 3) {
+		blinkWinnerLED(playerOne, playerTwo);
 	}
 }
 
