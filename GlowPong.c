@@ -1,3 +1,14 @@
+//----------------------------------------------------------
+//
+// Name: Alan Cheng
+// SID: 861094564
+//
+// CS 120B Final Project: GlowPong
+//
+// Filename: GlowPong.c
+//
+//----------------------------------------------------------
+
 #include "avr/io.h"
 #include "utilities.h"
 #include "io.h"

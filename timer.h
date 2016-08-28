@@ -1,3 +1,17 @@
+//----------------------------------------------------------
+//
+// Name: Alan Cheng
+// SID: 861094564
+//
+// CS 120B Final Project: GlowPong
+//
+// Filename: timer.h
+//
+// Disclaimer: Me and Natalie made this for lab, and are currently
+// 			   reusing it for the final project
+//
+//----------------------------------------------------------
+
 #ifndef __TIMER_H__
 #define __TIMER_H__
 

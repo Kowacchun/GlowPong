@@ -1,3 +1,14 @@
+//----------------------------------------------------------
+//
+// Name: Alan Cheng
+// SID: 861094564
+//
+// CS 120B Final Project: GlowPong
+//
+// Filename: gamefunctions.h
+//
+//----------------------------------------------------------
+
 #ifndef __GAMEFUNCTIONS_H__
 #define __GAMEFUNCTIONS_H__
 

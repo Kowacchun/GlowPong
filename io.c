@@ -1,3 +1,17 @@
+//----------------------------------------------------------
+//
+// Name: Alan Cheng
+// SID: 861094564
+//
+// CS 120B Final Project: GlowPong
+//
+// Filename: io.c
+//
+// Disclaimer: Me and Natalie made this for lab, and are currently
+//         reusing it for the final project
+//
+//----------------------------------------------------------
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdio.h>

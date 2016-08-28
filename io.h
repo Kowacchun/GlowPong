@@ -1,3 +1,17 @@
+//----------------------------------------------------------
+//
+// Name: Alan Cheng
+// SID: 861094564
+//
+// CS 120B Final Project: GlowPong
+//
+// Filename: io.h
+//
+// Disclaimer: Me and Natalie made this for lab as partners,
+// 			   and are reusing it for the final project.
+//
+//----------------------------------------------------------
+
 #ifndef __io_h__
 #define __io_h__
 
