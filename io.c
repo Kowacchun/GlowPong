@@ -7,8 +7,7 @@
 //
 // Filename: io.c
 //
-// Disclaimer: Me and Natalie made this for lab, and are currently
-//         reusing it for the final project
+// Source: https://drive.google.com/drive/u/0/folders/0B7I3PmI9QsJTNXdQcFJuSjktWE0
 //
 //----------------------------------------------------------
 
